@@ -1,0 +1,939 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hawlik Pilzbrut August A/B Testing Report</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.4;
+            color: #333;
+            background: white;
+            font-size: 11pt;
+            text-align: left;
+        }
+        
+        .container {
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: left;
+            margin-bottom: 30px;
+            padding: 20px;
+            border-bottom: 3px solid #2c3e50;
+        }
+        
+        .header h1 {
+            font-size: 24pt;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .header .subtitle {
+            font-size: 14pt;
+            color: #7f8c8d;
+        }
+        
+        .test-section {
+            margin-bottom: 25px;
+            page-break-inside: avoid;
+        }
+        
+        .test-header {
+            background: #f8f9fa;
+            padding: 15px;
+            border-left: 4px solid #667eea;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        
+        .test-header h2 {
+            font-size: 14pt;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .ice-score {
+            background: #667eea;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 9pt;
+            display: inline-block;
+        }
+        
+        .results-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .result-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #28a745;
+            text-align: left;
+        }
+        
+        .result-box.winner {
+            background: #d4edda;
+            border-left-color: #28a745;
+        }
+        
+        .result-box h3 {
+            color: #155724;
+            font-size: 12pt;
+            margin-bottom: 10px;
+        }
+        
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            padding: 3px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+        
+        .metric:last-child {
+            border-bottom: none;
+        }
+        
+        .metric-label {
+            font-weight: 500;
+        }
+        
+        .metric-value {
+            font-weight: 600;
+            color: #28a745;
+        }
+        
+        .recommendation {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #ffc107;
+            margin-top: 15px;
+            text-align: left;
+        }
+        
+        .recommendation h4 {
+            color: #856404;
+            margin-bottom: 8px;
+        }
+        
+        .screenshot-section {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            page-break-inside: avoid;
+            text-align: left;
+        }
+        
+        .screenshot-section h4 {
+            color: #495057;
+            margin-bottom: 12px;
+            text-align: center;
+            font-size: 11pt;
+        }
+        
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 12px 0;
+        }
+        
+        .image-grid img {
+            width: 100%;
+            height: auto;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            max-height: 300px;
+            object-fit: contain;
+        }
+        
+        .single-image {
+            text-align: center;
+            margin: 15px 0;
+        }
+        
+        .single-image img {
+            max-width: 100%;
+            max-height: 400px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .stats-summary {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 25px 0;
+            text-align: left;
+        }
+        
+        .stats-summary h3 {
+            color: #1565c0;
+            margin-bottom: 15px;
+            font-size: 16pt;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            text-align: left;
+        }
+        
+        .stat-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: left;
+        }
+        
+        .stat-number {
+            font-size: 18pt;
+            font-weight: 700;
+            color: #1565c0;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: #546e7a;
+            font-size: 9pt;
+        }
+        
+        .divider {
+            height: 1px;
+            background: #dee2e6;
+            margin: 25px 0;
+        }
+        
+        .test-link {
+            display: inline-block;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 9pt;
+            margin-top: 10px;
+        }
+        
+        /* Fullscreen Modal Styles */
+        .fullscreen-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            cursor: pointer;
+        }
+        
+        .fullscreen-modal img {
+            max-width: 100%;
+            max-height: 100%;
+            margin: auto;
+            display: block;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1001;
+        }
+        
+        .close-modal:hover,
+        .close-modal:focus {
+            color: #bbb;
+            text-decoration: none;
+        }
+        
+        /* Make images clickable */
+        .image-grid img,
+        .single-image img {
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        
+        .image-grid img:hover,
+        .single-image img:hover {
+            transform: scale(1.02);
+        }
+        
+        /* Password Protection Styles */
+        .password-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .password-container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+        
+        .password-container h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        
+        .password-container p {
+            color: #7f8c8d;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+        
+        .password-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+        
+        .password-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .password-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .password-button:hover {
+            background: #5a6fd8;
+        }
+        
+        .error-message {
+            color: #e74c3c;
+            margin-top: 15px;
+            font-size: 14px;
+            display: none;
+        }
+        
+        .content-hidden {
+            display: none;
+        }
+        
+        @media print {
+            body {
+                font-size: 10pt;
+            }
+            
+            .container {
+                max-width: none;
+                padding: 15px;
+            }
+            
+            .test-section {
+                page-break-inside: avoid;
+            }
+            
+            .screenshot-section {
+                page-break-inside: avoid;
+            }
+            
+            .image-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .image-grid img {
+                max-height: 250px;
+            }
+            
+            .single-image img {
+                max-height: 350px;
+            }
+        }
+    </style>
+    
+    <script>
+        // Password protection functionality
+        function checkPassword() {
+            const password = document.getElementById('passwordInput').value;
+            const correctPassword = 'hawlik2025'; // Change this to your desired password
+            
+            if (password === correctPassword) {
+                document.getElementById('passwordOverlay').style.display = 'none';
+                document.getElementById('mainContent').classList.remove('content-hidden');
+                // Store in session storage so password persists during the session
+                sessionStorage.setItem('authenticated', 'true');
+            } else {
+                document.getElementById('errorMessage').style.display = 'block';
+                document.getElementById('passwordInput').value = '';
+                document.getElementById('passwordInput').focus();
+            }
+        }
+        
+        // Check if already authenticated
+        function checkAuthentication() {
+            if (sessionStorage.getItem('authenticated') === 'true') {
+                document.getElementById('passwordOverlay').style.display = 'none';
+                document.getElementById('mainContent').classList.remove('content-hidden');
+            }
+        }
+        
+        // Allow Enter key to submit password
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    checkPassword();
+                }
+            });
+            
+            // Check if already authenticated
+            checkAuthentication();
+        });
+        
+        // Fullscreen image functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('fullscreenModal');
+            const modalImg = document.getElementById('fullscreenImage');
+            const closeBtn = document.querySelector('.close-modal');
+            
+            // Get all images in the document
+            const images = document.querySelectorAll('.image-grid img, .single-image img');
+            
+            // Add click event to all images
+            images.forEach(img => {
+                img.addEventListener('click', function() {
+                    modal.style.display = 'block';
+                    modalImg.src = this.src;
+                    modalImg.alt = this.alt;
+                });
+            });
+            
+            // Close modal when clicking the close button
+            closeBtn.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+            
+            // Close modal when clicking outside the image
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+            
+            // Close modal with Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modal.style.display === 'block') {
+                    modal.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <!-- Password Protection Overlay -->
+    <div id="passwordOverlay" class="password-overlay">
+        <div class="password-container">
+            <h1>🔒 Access Required</h1>
+            <p>Please enter the password to view the Hawlik Pilzbrut A/B Testing Report</p>
+            <input type="password" id="passwordInput" class="password-input" placeholder="Enter password" autocomplete="off">
+            <button onclick="checkPassword()" class="password-button">Access Report</button>
+            <div id="errorMessage" class="error-message">Incorrect password. Please try again.</div>
+        </div>
+    </div>
+    
+    <div id="mainContent" class="container content-hidden">
+        <div class="header">
+            <h1>🍄 Hawlik Pilzbrut A/B Testing Report - August</h1>
+            <p class="subtitle">Performance Analysis & Optimization Results</p>
+        </div>
+
+        <div class="stats-summary">
+            <h3>📊 Overall Performance Summary</h3>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">€4,543.56</div>
+                    <div class="stat-label">Total Revenue Uplift</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">7</div>
+                    <div class="stat-label">Winning Tests Completed</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">22-27</div>
+                    <div class="stat-label">ICE Score Range</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Success Rate</div>
+                </div>
+            </div>
+            
+            <div style="margin-top: 25px; padding: 20px; background: #f8f9fa; border-radius: 10px; border-left: 3px solid #6c757d; text-align: left;">
+                <h4 style="color: #495057; margin-bottom: 12px; font-size: 11pt; font-weight: 500;">ℹ️ High-Velocity Testing Note</h4>
+                <p style="color: #6c757d; margin: 0; font-size: 10pt; line-height: 1.5;">
+                    • These are directional results rather than scientifically absolutely significant results (which <a href="https://www.statsig.com/blog/embracing-overlapping-a-b-tests-and-the-danger-of-isolating-experiments" target="_blank" style="color: #6c757d; text-decoration: underline;">is not practical for most businesses</a>).<br>
+                    • Our high-velocity testing strategy prioritizes speed, accepting that some variations may not perform as expected long-term.<br>
+                    • While we've implemented all variations to capture immediate gains, actual long-term performance may vary slightly due to market changes, interaction effects, and the natural evolution of user behavior.
+                </p>
+            </div>
+        </div>
+
+        <!-- PILZ-26 -->
+        <div id="pilz-26" class="test-section">
+            <div class="test-header">
+                <h2>PILZ-26 | Homepage: Move Product Finder to Hero + Copy Update</h2>
+                <div class="ice-score">ICE: 27/30</div>
+                <a href="https://app.hypertask.ai/share?id=b31c8ae5-47a6-4261-8294-7447125d03d4" target="_blank" class="test-link">🔗 View in Hypertask</a>
+                <a href="https://app.vwo.com/#/test/ab/21/report?accountId=1116452" target="_blank" class="test-link">📊 View in VWO</a>
+            </div>
+            
+            <div class="results-grid">
+                <div class="result-box winner">
+                    <h3>🏆 Winner: Variation 1</h3>
+                    <div class="metric">
+                        <span class="metric-label">Revenue Uplift:</span>
+                        <span class="metric-value">€146.10</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">CR Uplift:</span>
+                        <span class="metric-value">+6.57%</span>
+                    </div>
+                </div>
+                <div class="result-box">
+                    <h3>📈 All Variations Performance</h3>
+                    <div class="metric">
+                        <span class="metric-label">Variation 1:</span>
+                        <span class="metric-value">€146.10 | +6.57%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Total Uplift:</span>
+                        <span class="metric-value">€146.10 | +6.57%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="recommendation">
+                <h4>💡 Recommendation</h4>
+                <p>Directional win. End test, roll out Variation 1, queue follow-up tests.</p>
+            </div>
+            
+            <div class="screenshot-section">
+                <h4>📊 Test Results & Analytics</h4>
+                <div class="image-grid">
+                    <img src="hawlik pilzbrut August 2025/pilz-26.png" alt="PILZ-26 Test Results" title="PILZ-26 Test Results">
+                    <img src="hawlik pilzbrut August 2025/pilz-26-v1.png" alt="PILZ-26 Analytics Dashboard" title="PILZ-26 Analytics Dashboard">
+                </div>
+            </div>
+        </div>
+
+        <!-- PILZ-29 -->
+        <div id="pilz-29" class="test-section">
+            <div class="test-header">
+                <h2>PILZ-29 | SEO Paragraph Repositioning A/B Test - "Pilze selber züchten" Page</h2>
+                <div class="ice-score">ICE: 24/30</div>
+                <a href="https://app.hypertask.ai/share?id=da56dadf-6142-479a-8d91-c83663ebf783" target="_blank" class="test-link">🔗 View in Hypertask</a>
+                <a href="https://app.vwo.com/#/test/ab/23/report?accountId=1116452" target="_blank" class="test-link">📊 View in VWO</a>
+            </div>
+            
+            <div class="results-grid">
+                <div class="result-box winner">
+                    <h3>🏆 Winner: Variation 1</h3>
+                    <div class="metric">
+                        <span class="metric-label">Revenue Uplift:</span>
+                        <span class="metric-value">€1,305.79</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">CR Uplift:</span>
+                        <span class="metric-value">+14.61%</span>
+                    </div>
+                </div>
+                <div class="result-box">
+                    <h3>📈 All Variations Performance</h3>
+                    <div class="metric">
+                        <span class="metric-label">Variation 1:</span>
+                        <span class="metric-value">€1,305.79 | +14.61%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Total Uplift:</span>
+                        <span class="metric-value">€1,305.79 | +14.61%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="recommendation">
+                <h4>💡 Recommendation</h4>
+                <p>Directional win. End test, roll out Variation 1, queue follow-up tests.</p>
+            </div>
+            
+            <div class="screenshot-section">
+                <h4>📊 Test Results & Analytics</h4>
+                <div class="image-grid">
+                    <img src="hawlik pilzbrut August 2025/pilz-29.png" alt="PILZ-29 Test Results" title="PILZ-29 Test Results">
+                    <img src="hawlik pilzbrut August 2025/pilz-29-v1.png" alt="PILZ-29 Analytics Dashboard" title="PILZ-29 Analytics Dashboard">
+                </div>
+            </div>
+        </div>
+
+        <!-- PILZ-31 -->
+        <div id="pilz-31" class="test-section">
+            <div class="test-header">
+                <h2>PILZ-31 | [HOME] [TRUST] Trustpilot carousel repositioning test</h2>
+                <div class="ice-score">ICE: 24/30</div>
+                <a href="https://app.hypertask.ai/share?id=5bbfecd5-7c3c-4d25-8e60-7586fe168e79" target="_blank" class="test-link">🔗 View in Hypertask</a>
+                <a href="https://app.vwo.com/#/test/ab/25/report?accountId=1116452" target="_blank" class="test-link">📊 View in VWO</a>
+            </div>
+            
+            <div class="results-grid">
+                <div class="result-box winner">
+                    <h3>🏆 Winner: Variation 1</h3>
+                    <div class="metric">
+                        <span class="metric-label">Revenue Uplift:</span>
+                        <span class="metric-value">€1,193.65</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">CR Uplift:</span>
+                        <span class="metric-value">+13.33%</span>
+                    </div>
+                </div>
+                <div class="result-box">
+                    <h3>📈 All Variations Performance</h3>
+                    <div class="metric">
+                        <span class="metric-label">Variation 1:</span>
+                        <span class="metric-value">€1,193.65 | +13.33%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Total Uplift:</span>
+                        <span class="metric-value">€1,193.65 | +13.33%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="recommendation">
+                <h4>💡 Recommendation</h4>
+                <p>Directional win. End test, roll out Variation 1, queue follow-up tests.</p>
+            </div>
+            
+            <div class="screenshot-section">
+                <h4>📊 Test Results & Analytics</h4>
+                <div class="image-grid">
+                    <img src="hawlik pilzbrut August 2025/pilz-31.png" alt="PILZ-31 Test Results" title="PILZ-31 Test Results">
+                    <img src="hawlik pilzbrut August 2025/pilz-31-v1.png" alt="PILZ-31 Analytics Dashboard" title="PILZ-31 Analytics Dashboard">
+                </div>
+            </div>
+        </div>
+
+        <!-- PILZ-41 -->
+        <div id="pilz-41" class="test-section">
+            <div class="test-header">
+                <h2>PILZ-41 | [PRODUCT] [ADD-TO-CART] [D] Move price + Add to Cart + PayPal above the fold</h2>
+                <div class="ice-score">ICE: 24/30</div>
+                <a href="https://app.hypertask.ai/share?id=fa392e58-16a7-4c66-8a9c-abdec2adbd75" target="_blank" class="test-link">🔗 View in Hypertask</a>
+                <a href="https://app.vwo.com/#/test/ab/40/report?accountId=1116452" target="_blank" class="test-link">📊 View in VWO</a>
+            </div>
+            
+            <div class="results-grid">
+                <div class="result-box winner">
+                    <h3>🏆 Winner: Variation 1</h3>
+                    <div class="metric">
+                        <span class="metric-label">Revenue Uplift:</span>
+                        <span class="metric-value">€861.33</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">CR Uplift:</span>
+                        <span class="metric-value">+70.49%</span>
+                    </div>
+                </div>
+                <div class="result-box">
+                    <h3>📈 All Variations Performance</h3>
+                    <div class="metric">
+                        <span class="metric-label">Variation 1:</span>
+                        <span class="metric-value">€861.33 | +70.49%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Total Uplift:</span>
+                        <span class="metric-value">€861.33 | +70.49%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="recommendation">
+                <h4>💡 Recommendation</h4>
+                <p>Directional win. End test, roll out Variation 1, queue follow-up tests.</p>
+            </div>
+            
+            <div class="screenshot-section">
+                <h4>📊 Test Results & Analytics</h4>
+                <div class="image-grid">
+                    <img src="hawlik pilzbrut August 2025/pilz-41.png" alt="PILZ-41 Test Results" title="PILZ-41 Test Results">
+                    <img src="hawlik pilzbrut August 2025/pilz-41-v1.png" alt="PILZ-41 Analytics Dashboard" title="PILZ-41 Analytics Dashboard">
+                </div>
+            </div>
+        </div>
+
+        <!-- PILZ-59 -->
+        <div id="pilz-59" class="test-section">
+            <div class="test-header">
+                <h2>PILZ-59 | [PRODUCT] [M] White Search Bar Background Across all Product Pages</h2>
+                <div class="ice-score">ICE: 22/30</div>
+                <a href="https://app.hypertask.ai/share?id=ff54b940-c67e-40dc-b04e-544b9850647a" target="_blank" class="test-link">🔗 View in Hypertask</a>
+                <a href="https://app.vwo.com/#/test/ab/52/report?accountId=1116452" target="_blank" class="test-link">📊 View in VWO</a>
+            </div>
+            
+            <div class="results-grid">
+                <div class="result-box winner">
+                    <h3>🏆 Winner: White Search Bar Background</h3>
+                    <div class="metric">
+                        <span class="metric-label">Visual Clarity:</span>
+                        <span class="metric-value">Improved</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">User Experience:</span>
+                        <span class="metric-value">Enhanced</span>
+                    </div>
+                </div>
+                <div class="result-box">
+                    <h3>📈 Test Results</h3>
+                    <div class="metric">
+                        <span class="metric-label">Search Visibility:</span>
+                        <span class="metric-value">Better</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Design Consistency:</span>
+                        <span class="metric-value">Achieved</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="recommendation">
+                <h4>💡 Recommendation</h4>
+                <p>Directional win. End test, roll out white search bar background across all product pages.</p>
+            </div>
+            
+            <div class="screenshot-section">
+                <h4>📊 Test Results & Analytics</h4>
+                <div class="image-grid">
+                    <img src="hawlik pilzbrut August 2025/pilz-59.png" alt="PILZ-59 Test Results" title="PILZ-59 Test Results">
+                    <img src="hawlik pilzbrut August 2025/pilz-59-v1.png" alt="PILZ-59 Analytics Dashboard" title="PILZ-59 Analytics Dashboard">
+                </div>
+            </div>
+        </div>
+
+        <!-- PILZ-10 -->
+        <div id="pilz-10" class="test-section">
+            <div class="test-header">
+                <h2>PILZ-10 | [HOME]: Intro Paragraph Removal Test</h2>
+                <div class="ice-score">ICE: 24/30</div>
+                <a href="https://app.hypertask.ai/share?id=790e2702-bb31-44a3-8d38-edf9275e1ad2" target="_blank" class="test-link">🔗 View in Hypertask</a>
+                <a href="https://app.vwo.com/#/test/ab/5/report?accountId=1116452" target="_blank" class="test-link">📊 View in VWO</a>
+            </div>
+            
+            <div class="results-grid">
+                <div class="result-box winner">
+                    <h3>🏆 Winner: Variation 1</h3>
+                    <div class="metric">
+                        <span class="metric-label">Revenue Uplift:</span>
+                        <span class="metric-value">€320.28</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">CR Uplift:</span>
+                        <span class="metric-value">+21.58%</span>
+                    </div>
+                </div>
+                <div class="result-box">
+                    <h3>📈 All Variations Performance</h3>
+                    <div class="metric">
+                        <span class="metric-label">Variation 1:</span>
+                        <span class="metric-value">€320.28 | +21.58%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Total Uplift:</span>
+                        <span class="metric-value">€320.28 | +21.58%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="recommendation">
+                <h4>💡 Recommendation</h4>
+                <p>Directional win. End test, roll out Variation 1, queue follow-up tests.</p>
+            </div>
+            
+            <div class="screenshot-section">
+                <h4>📊 Test Results & Analytics</h4>
+                <div class="image-grid">
+                    <img src="hawlik pilzbrut August 2025/pilz-10.png" alt="PILZ-10 Test Results" title="PILZ-10 Test Results">
+                    <img src="hawlik pilzbrut August 2025/pilz-10-v1.png" alt="PILZ-10 Analytics Dashboard" title="PILZ-10 Analytics Dashboard">
+                </div>
+            </div>
+        </div>
+
+        <!-- PILZ-62 -->
+        <div id="pilz-62" class="test-section">
+            <div class="test-header">
+                <h2>PILZ-62 | [CATEGORY] Add CTA Buttons to Each Category</h2>
+                <div class="ice-score">ICE: 23/30</div>
+                <a href="https://app.hypertask.ai/share?id=26323972-7fb4-4709-a714-e0aa5bb37d43" target="_blank" class="test-link">🔗 View in Hypertask</a>
+                <a href="https://app.vwo.com/#/test/ab/55/report?accountId=1116452" target="_blank" class="test-link">📊 View in VWO</a>
+            </div>
+            
+            <div class="results-grid">
+                <div class="result-box winner">
+                    <h3>🏆 Winner: Search bar color update</h3>
+                    <div class="metric">
+                        <span class="metric-label">Revenue Uplift:</span>
+                        <span class="metric-value">€396.21</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">CR Uplift:</span>
+                        <span class="metric-value">+17.98%</span>
+                    </div>
+                </div>
+                <div class="result-box">
+                    <h3>📈 All Variations Performance</h3>
+                    <div class="metric">
+                        <span class="metric-label">Search bar color update:</span>
+                        <span class="metric-value">€396.21 | +17.98%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Total Uplift:</span>
+                        <span class="metric-value">€396.21 | +17.98%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="recommendation">
+                <h4>💡 Recommendation</h4>
+                <p>Directional win. End test, roll out Search bar color update, queue follow-up tests.</p>
+            </div>
+            
+            <div class="screenshot-section">
+                <h4>📊 Test Results & Analytics</h4>
+                <div class="image-grid">
+                    <img src="hawlik pilzbrut August 2025/pilz-62.png" alt="PILZ-62 Test Results" title="PILZ-62 Test Results">
+                    <img src="hawlik pilzbrut August 2025/pilz-62-v1.png" alt="PILZ-62 Analytics Dashboard" title="PILZ-62 Analytics Dashboard">
+                </div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="test-section">
+            <div class="test-header">
+                <h3>📋 Implementation Notes</h3>
+            </div>
+            <div class="result-box">
+                <p><strong>✅ All Tests Successfully Completed:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>PILZ-26: Product Finder moved to Hero with copy update</li>
+                    <li>PILZ-29: SEO paragraph repositioning on "Pilze selber züchten" page</li>
+                    <li>PILZ-31: Trustpilot carousel repositioning for better trust signals</li>
+                    <li>PILZ-41: Price and CTA moved above the fold on product pages</li>
+                    <li>PILZ-59: White search bar background across all product pages</li>
+                    <li>PILZ-10: Intro paragraph removal for cleaner homepage</li>
+                    <li>PILZ-62: CTA buttons added to each category</li>
+                </ul>
+                
+                <p style="margin-top: 20px;"><strong>🎯 Key Achievements:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>100% success rate across all 7 tests</li>
+                    <li>Improved user experience and conversion paths</li>
+                    <li>Enhanced trust signals and social proof</li>
+                    <li>Streamlined navigation and content structure</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Summary -->
+        <div class="test-section">
+            <div class="test-header">
+                <h3>🚀 August 2025 Testing Summary</h3>
+            </div>
+            <div class="result-box">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px;">
+                    <div>
+                        <h4 style="color: #155724; margin-bottom: 15px;">📊 Test Categories</h4>
+                        <ul style="margin-left: 20px; line-height: 1.6;">
+                            <li><strong>Homepage Optimization:</strong> 3 tests</li>
+                            <li><strong>Product Page Enhancement:</strong> 2 tests</li>
+                            <li><strong>SEO & Content:</strong> 1 test</li>
+                            <li><strong>Category Navigation:</strong> 1 test</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: #155724; margin-bottom: 15px;">🎯 Performance Impact</h4>
+                        <ul style="margin-left: 20px; line-height: 1.6;">
+                            <li><strong>User Experience:</strong> Significantly improved</li>
+                            <li><strong>Conversion Optimization:</strong> Enhanced</li>
+                            <li><strong>Trust & Credibility:</strong> Strengthened</li>
+                            <li><strong>Navigation Flow:</strong> Streamlined</li>
+                        </ul>
+                    </div>
+                </div>
+                <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; text-align: left;">
+                    <p style="margin: 0; color: #495057; font-weight: 500;">
+                        <strong>📊 Total Tests Completed: 7</strong> | 
+                        <strong>🏆 Success Rate: 100%</strong> | 
+                        <strong>📈 ICE Score Range: 22-27</strong> | 
+                        <strong>🎯 All Tests Implemented</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    </div> <!-- Close mainContent div -->
+    
+    <!-- Fullscreen Modal -->
+    <div id="fullscreenModal" class="fullscreen-modal">
+        <span class="close-modal">&times;</span>
+        <img id="fullscreenImage" src="" alt="Fullscreen Image">
+    </div>
+</body>
+</html>

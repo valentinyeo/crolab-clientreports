@@ -1,0 +1,1218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teethlovers August A/B Testing Report</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.4;
+            color: #333;
+            background: white;
+            font-size: 11pt;
+            text-align: left;
+        }
+        
+        .container {
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: left;
+            margin-bottom: 30px;
+            padding: 20px;
+            border-bottom: 3px solid #2c3e50;
+        }
+        
+        .header h1 {
+            font-size: 24pt;
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+        
+        .header .subtitle {
+            font-size: 14pt;
+            color: #7f8c8d;
+        }
+        
+        .test-section {
+            margin-bottom: 25px;
+            page-break-inside: avoid;
+        }
+        
+        .test-header {
+            background: #f8f9fa;
+            padding: 15px;
+            border-left: 4px solid #667eea;
+            margin-bottom: 15px;
+            text-align: left;
+        }
+        
+        .test-header h2 {
+            font-size: 14pt;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        
+        .ice-score {
+            background: #667eea;
+            color: white;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 9pt;
+            display: inline-block;
+        }
+        
+        .results-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+        
+        .result-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #28a745;
+            text-align: left;
+        }
+        
+        .result-box.winner {
+            background: #d4edda;
+            border-left-color: #28a745;
+        }
+        
+        .result-box h3 {
+            color: #155724;
+            font-size: 12pt;
+            margin-bottom: 10px;
+        }
+        
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            padding: 3px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+        
+        .metric:last-child {
+            border-bottom: none;
+        }
+        
+        .metric-label {
+            font-weight: 500;
+        }
+        
+        .metric-value {
+            font-weight: 600;
+            color: #28a745;
+        }
+        
+        .recommendation {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 3px solid #ffc107;
+            margin-top: 15px;
+            text-align: left;
+        }
+        
+        .recommendation h4 {
+            color: #856404;
+            margin-bottom: 8px;
+        }
+        
+        .screenshot-section {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            page-break-inside: avoid;
+            text-align: left;
+        }
+        
+        .screenshot-section h4 {
+            color: #495057;
+            margin-bottom: 12px;
+            text-align: center;
+            font-size: 11pt;
+        }
+        
+        .image-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 12px 0;
+        }
+        
+        .image-grid img {
+            width: 100%;
+            height: auto;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            max-height: 300px;
+            object-fit: contain;
+        }
+        
+        .single-image {
+            text-align: center;
+            margin: 15px 0;
+        }
+        
+        .single-image img {
+            max-width: 100%;
+            max-height: 400px;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+        
+        .stats-summary {
+            background: #e3f2fd;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 25px 0;
+            text-align: left;
+        }
+        
+        .stats-summary h3 {
+            color: #1565c0;
+            margin-bottom: 15px;
+            font-size: 16pt;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            text-align: left;
+        }
+        
+        .stat-item {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: left;
+        }
+        
+        .stat-number {
+            font-size: 18pt;
+            font-weight: 700;
+            color: #1565c0;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            color: #546e7a;
+            font-size: 9pt;
+        }
+        
+        .divider {
+            height: 1px;
+            background: #dee2e6;
+            margin: 25px 0;
+        }
+        
+        .test-link {
+            display: inline-block;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 9pt;
+            margin-top: 10px;
+        }
+        
+        /* Fullscreen Modal Styles */
+        .fullscreen-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            cursor: pointer;
+        }
+        
+        .fullscreen-modal img {
+            max-width: 100%;
+            max-height: 100%;
+            margin: auto;
+            display: block;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            cursor: pointer;
+        }
+        
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1001;
+        }
+        
+        .close-modal:hover,
+        .close-modal:focus {
+            color: #bbb;
+            text-decoration: none;
+        }
+        
+        /* Make images clickable */
+        .image-grid img,
+        .single-image img {
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+        
+        .image-grid img:hover,
+        .single-image img:hover {
+            transform: scale(1.02);
+        }
+        
+        /* Password Protection Styles */
+        .password-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .password-container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+        
+        .password-container h1 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 24px;
+        }
+        
+        .password-container p {
+            color: #7f8c8d;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+        
+        .password-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 16px;
+            margin-bottom: 20px;
+            box-sizing: border-box;
+            transition: border-color 0.3s ease;
+        }
+        
+        .password-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .password-button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .password-button:hover {
+            background: #5a6fd8;
+        }
+        
+        .error-message {
+            color: #e74c3c;
+            margin-top: 15px;
+            font-size: 14px;
+            display: none;
+        }
+        
+        .content-hidden {
+            display: none;
+        }
+        
+        @media print {
+            body {
+                font-size: 10pt;
+            }
+            
+            .container {
+                max-width: none;
+                padding: 15px;
+            }
+            
+            .test-section {
+                page-break-inside: avoid;
+            }
+            
+            .screenshot-section {
+                page-break-inside: avoid;
+            }
+            
+            .image-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .image-grid img {
+                max-height: 250px;
+            }
+            
+            .single-image img {
+                max-height: 350px;
+            }
+        }
+    </style>
+    
+    <script>
+        // Password protection functionality
+        function checkPassword() {
+            const password = document.getElementById('passwordInput').value;
+            const correctPassword = 'teethlovers2025'; // Change this to your desired password
+            
+            if (password === correctPassword) {
+                document.getElementById('passwordOverlay').style.display = 'none';
+                document.getElementById('mainContent').classList.remove('content-hidden');
+                // Store in session storage so password persists during the session
+                sessionStorage.setItem('authenticated', 'true');
+            } else {
+                document.getElementById('errorMessage').style.display = 'block';
+                document.getElementById('passwordInput').value = '';
+                document.getElementById('passwordInput').focus();
+            }
+        }
+        
+        // Check if already authenticated
+        function checkAuthentication() {
+            if (sessionStorage.getItem('authenticated') === 'true') {
+                document.getElementById('passwordOverlay').style.display = 'none';
+                document.getElementById('mainContent').classList.remove('content-hidden');
+            }
+        }
+        
+        // Allow Enter key to submit password
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('passwordInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    checkPassword();
+                }
+            });
+            
+            // Check if already authenticated
+            checkAuthentication();
+        });
+        
+        // Fullscreen image functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const modal = document.getElementById('fullscreenModal');
+            const modalImg = document.getElementById('fullscreenImage');
+            const closeBtn = document.querySelector('.close-modal');
+            
+            // Get all images in the document
+            const images = document.querySelectorAll('.image-grid img, .single-image img');
+            
+            // Add click event to all images
+            images.forEach(img => {
+                img.addEventListener('click', function() {
+                    modal.style.display = 'block';
+                    modalImg.src = this.src;
+                    modalImg.alt = this.alt;
+                });
+            });
+            
+            // Close modal when clicking the close button
+            closeBtn.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+            
+            // Close modal when clicking outside the image
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+            
+            // Close modal with Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modal.style.display === 'block') {
+                    modal.style.display = 'none';
+                }
+            });
+        });
+    </script>
+</head>
+<body>
+    <!-- Password Protection Overlay -->
+    <div id="passwordOverlay" class="password-overlay">
+        <div class="password-container">
+            <h1>🔒 Access Required</h1>
+            <p>Please enter the password to view the Teethlovers A/B Testing Report</p>
+            <input type="password" id="passwordInput" class="password-input" placeholder="Enter password" autocomplete="off">
+            <button onclick="checkPassword()" class="password-button">Access Report</button>
+            <div id="errorMessage" class="error-message">Incorrect password. Please try again.</div>
+        </div>
+    </div>
+    
+    <div id="mainContent" class="container content-hidden">
+        <div class="header">
+            <h1>🦷 Teethlovers A/B Testing Report - August</h1>
+            <p class="subtitle">Performance Analysis & Optimization Results</p>
+        </div>
+
+        <div class="stats-summary">
+            <h3>📊 Overall Performance Summary</h3>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">€16,216</div>
+                    <div class="stat-label">Revenue Uplift from Winning Variations</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">€25,872</div>
+                    <div class="stat-label">Revenue Uplift from All Positive Variations</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">25</div>
+                    <div class="stat-label">New Tests Launched in August</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">12</div>
+                    <div class="stat-label">Winning Tests</div>
+                </div>
+
+            </div>
+            
+            <div style="margin-top: 25px; padding: 20px; background: #f8f9fa; border-radius: 10px; border-left: 3px solid #6c757d; text-align: left;">
+                <h4 style="color: #495057; margin-bottom: 12px; font-size: 11pt; font-weight: 500;">ℹ️ High-Velocity Testing Note</h4>
+                <p style="color: #6c757d; margin: 0; font-size: 10pt; line-height: 1.5;">
+                    • The are directional results rather than scientific absoltuely significant results (which <a href="https://www.statsig.com/blog/embracing-overlapping-a-b-tests-and-the-danger-of-isolating-experiments" target="_blank" style="color: #6c757d; text-decoration: underline;">is not practical for most businesses</a>).<br>
+                    • Our high-velocity testing strategy prioritizes speed, accepting that some variations may not perform as expected long-term.<br>
+                    • While we've implemented all variations to capture immediate gains, actual long-term performance may vary slightly due to market changes, interaction effects, and the natural evolution of user behavior.
+                </p>
+            </div>
+        </div>
+
+        <!-- TEET-104 -->
+        <div id="teet-104" class="test-section">
+            <div class="test-header">
+                <h2>TEET-104 | [HOME]: Accordion Benefit Text – Clarity & Persuasiveness Test</h2>
+                <div class="ice-score">ICE: 25/30</div>
+                <a href="https://app.hypertask.ai/share?id=1f22ef6c-8123-44a0-a62b-5bb772af5ad2" target="_blank" class="test-link">🔗 View in Hypertask</a>
+                <a href="https://app.vwo.com/#/test/ab/90/report?accountId=1091932" target="_blank" class="test-link">📊 View in VWO</a>
+            </div>
+            
+            <div class="results-grid">
+                <div class="result-box winner">
+                    <h3>🏆 Winner: Klinisch bewährt gegen (V3)</h3>
+                    <div class="metric">
+                        <span class="metric-label">Revenue Uplift:</span>
+                        <span class="metric-value">€1,190.57</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">CR Uplift:</span>
+                        <span class="metric-value">+32.65%</span>
+                    </div>
+                </div>
+                <div class="result-box">
+                    <h3>📈 All Variations Performance</h3>
+                    <div class="metric">
+                        <span class="metric-label">Bekämpft Karies und Fl... (V1):</span>
+                        <span class="metric-value">€690.05 | +19.20%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Schützt vor Karies (V2):</span>
+                        <span class="metric-value">€950.69 | +31.31%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Klinisch bewährt gegen (V3):</span>
+                        <span class="metric-value">€1,190.57 | +32.65%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Total Uplift:</span>
+                        <span class="metric-value">€2,831.31 | +27.77%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="recommendation">
+                <h4>💡 Recommendation</h4>
+                <p>Directional win. End test, roll out Klinisch bewährt gegen (V3)</p>
+            </div>
+            
+            <div class="screenshot-section">
+                <h4>📊 Test Results & Analytics</h4>
+                <div class="image-grid">
+                    <img src="images/image6.png" alt="TEET-104 Test Results" title="TEET-104 Test Results">
+                    <img src="images/image23.png" alt="TEET-104 Analytics Dashboard" title="TEET-104 Analytics Dashboard">
+                </div>
+            </div>
+        </div>
+
+        <!-- TEET-101 -->
+        <div id="teet-101" class="test-section">
+            <div class="test-header">
+                <h2>TEET-101 | [JS] [D]: Hero Headline Clarity & Benefit Emphasis Test</h2>
+                <div class="ice-score">ICE: 25/30</div>
+                <a href="https://app.hypertask.ai/share?id=94e4e9b8-c1eb-4bca-8e19-17e8bace1d2d" target="_blank" class="test-link">🔗 View in Hypertask</a>
+                <a href="https://app.vwo.com/#/test/ab/87/report?accountId=1091932" target="_blank" class="test-link">📊 View in VWO</a>
+            </div>
+            
+            <div class="results-grid">
+                <div class="result-box winner">
+                    <h3>🏆 Winner: Hol Dir Dein strahlends... (V4)</h3>
+                    <div class="metric">
+                        <span class="metric-label">Revenue Uplift:</span>
+                        <span class="metric-value">€1,009.88</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">CR Uplift:</span>
+                        <span class="metric-value">+62.00%</span>
+                    </div>
+                </div>
+                <div class="result-box">
+                    <h3>📈 All Variations Performance</h3>
+                    <div class="metric">
+                        <span class="metric-label">Strahlendes Lächeln, w... (V1):</span>
+                        <span class="metric-value">€911.10 | +44.00%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Weiße Zähne, strahlen... (V2):</span>
+                        <span class="metric-value">€902.77 | +54.00%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Gesunde, weiße Zähne (V3):</span>
+                        <span class="metric-value">€524.05 | +20.00%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Hol Dir Dein strahlends... (V4):</span>
+                        <span class="metric-value">€1,009.88 | +62.00%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Total Uplift:</span>
+                        <span class="metric-value">€7,325.62 | +43.90%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="recommendation">
+                <h4>💡 Recommendation</h4>
+                <p>Strong directional win. End test, roll out Hol Dir Dein strahlends... (V4) as top performer</p>
+            </div>
+            
+            <div class="screenshot-section">
+                <h4>📊 Test Results & Analytics</h4>
+                <div class="image-grid">
+                    <img src="images/image5.png" alt="TEET-101 Test Results" title="TEET-101 Test Results">
+                    <img src="images/image20.png" alt="TEET-101 Analytics Dashboard" title="TEET-101 Analytics Dashboard">
+                </div>
+            </div>
+        </div>
+
+        <!-- TEET-94 -->
+        <div id="teet-94" class="test-section">
+            <div class="test-header">
+                <h2>TEET-94 | [HOME]: Glowcast Description Copy Clarity and Engagement Enhancement</h2>
+                <div class="ice-score">ICE: 24/30</div>
+                <a href="https://app.hypertask.ai/share?id=0e34ce84-0a0c-4778-b59d-3dcd4f1c1e0d" target="_blank" class="test-link">🔗 View in Hypertask</a>
+                <a href="https://app.vwo.com/#/test/ab/80/summary/?accountId=1091932" target="_blank" class="test-link">📊 View in VWO</a>
+            </div>
+            
+            <div class="results-grid">
+                <div class="result-box winner">
+                    <h3>🏆 Winner: Erfahre, warum immer ...</h3>
+                    <div class="metric">
+                        <span class="metric-label">Revenue Uplift:</span>
+                        <span class="metric-value">€1,335.16</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">CR Uplift:</span>
+                        <span class="metric-value">+14.07%</span>
+                    </div>
+                </div>
+                <div class="result-box">
+                    <h3>📈 All Variations Performance</h3>
+                    <div class="metric">
+                        <span class="metric-label">Erfahre, warum immer ...:</span>
+                        <span class="metric-value">€1,335.16 | +14.07%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Total Uplift:</span>
+                        <span class="metric-value">€1,335.16 | +14.07%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="screenshot-section">
+                <h4>📊 Test Results & Analytics</h4>
+                <div class="image-grid">
+                    <img src="images/image21.png" alt="TEET-94 Test Results" title="TEET-94 Test Results">
+                    <img src="images/image13.png" alt="TEET-94 Analytics Dashboard" title="TEET-94 Analytics Dashboard">
+                </div>
+            </div>
+        </div>
+
+        <!-- TEET-88 -->
+        <div id="teet-88" class="test-section">
+            <div class="test-header">
+                <h2>TEET-88 | [HOME]: Refine 'About Us' CTA to Match Emotional Storytelling</h2>
+                <div class="ice-score">ICE: 25/30</div>
+                <a href="https://app.hypertask.ai/share?id=4d53c692-c590-4107-96c0-0cd1bb78af2a" target="_blank" class="test-link">🔗 View in Hypertask</a>
+                <a href="https://app.vwo.com/#/test/ab/74/summary/?accountId=1091932" target="_blank" class="test-link">📊 View in VWO</a>
+            </div>
+            
+            <div class="results-grid">
+                <div class="result-box winner">
+                    <h3>🏆 Winner: Lerne Alex & Marie ken...</h3>
+                    <div class="metric">
+                        <span class="metric-label">Revenue Uplift:</span>
+                        <span class="metric-value">€1,036.94</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">CR Uplift:</span>
+                        <span class="metric-value">+3.92%</span>
+                    </div>
+                </div>
+                <div class="result-box">
+                    <h3>📈 All Variations Performance</h3>
+                    <div class="metric">
+                        <span class="metric-label">Lerne Alex & Marie ken...:</span>
+                        <span class="metric-value">€1,036.94 | +3.92%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Total Uplift:</span>
+                        <span class="metric-value">€1,036.94 | +3.92%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="recommendation">
+                <h4>💡 Recommendation</h4>
+                <p>Directional win.</p>
+            </div>
+            
+            <div class="screenshot-section">
+                <h4>📊 Test Results & Analytics</h4>
+                <div class="image-grid">
+                    <img src="images/image26.png" alt="TEET-88 Test Results" title="TEET-88 Test Results">
+                    <img src="images/image11.png" alt="TEET-88 Analytics Dashboard" title="TEET-88 Analytics Dashboard">
+                </div>
+            </div>
+        </div>
+
+        <!-- TEET-62 -->
+        <div id="teet-62" class="test-section">
+            <div class="test-header">
+                <h2>TEET-62 | [HOME] Hero CTA Redirect from Jetzt Starten to Collections Sets Page</h2>
+                <div class="ice-score">ICE: 21/30</div>
+                <a href="https://app.hypertask.ai/share?id=0e34ce84-0a0c-4778-b59d-3dcd4f1c1e0d" target="_blank" class="test-link">🔗 View in Hypertask</a>
+            </div>
+            
+            <div class="results-grid">
+                <div class="result-box winner">
+                    <h3>🏆 Winner: CTA directs to collection</h3>
+                    <div class="metric">
+                        <span class="metric-label">Revenue Uplift:</span>
+                        <span class="metric-value">€1,904.50</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">CR Uplift:</span>
+                        <span class="metric-value">+4.60%</span>
+                    </div>
+                </div>
+                <div class="result-box">
+                    <h3>📈 All Variations Performance</h3>
+                    <div class="metric">
+                        <span class="metric-label">CTA directs to collection:</span>
+                        <span class="metric-value">€1,904.50 | +4.60%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Total Uplift:</span>
+                        <span class="metric-value">€1,904.50 | +4.60%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="recommendation">
+                <h4>💡 Recommendation</h4>
+                <p>Directional win.</p>
+            </div>
+            
+            <div class="single-image">
+                <img src="images/image24.png" alt="TEET-62 Test Results" title="TEET-62 Test Results">
+            </div>
+        </div>
+
+        <!-- TEET-73 -->
+        <div id="teet-73" class="test-section">
+            <div class="test-header">
+                <h2>TEET-73 | [HOME]: Reword "Starter sets" Homepage Heading to Align with 'Jetzt Starten' Page</h2>
+                <div class="ice-score">ICE: 24/30</div>
+                <a href="https://app.hypertask.ai/share?id=d34e2683-1376-4f01-ae28-1e63bd7e4bf1" target="_blank" class="test-link">🔗 View in Hypertask</a>
+                <a href="https://app.vwo.com/#/test/ab/62/summary/?accountId=1091932" target="_blank" class="test-link">📊 View in VWO</a>
+            </div>
+            
+            <div class="results-grid">
+                <div class="result-box winner">
+                    <h3>🏆 Winner: Beginne Deine Reise zu weißeren Zähnen</h3>
+                    <div class="metric">
+                        <span class="metric-label">Revenue Uplift:</span>
+                        <span class="metric-value">€1,510.84</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">CR Uplift:</span>
+                        <span class="metric-value">+20.23%</span>
+                    </div>
+                </div>
+                <div class="result-box">
+                    <h3>📈 All Variations Performance</h3>
+                    <div class="metric">
+                        <span class="metric-label">Dein erster Schritt zu w...:</span>
+                        <span class="metric-value">€635.48 | +9.65%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Entdecke unsere Start...:</span>
+                        <span class="metric-value">€541.63 | +8.36%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Beginne Deine Reise z...:</span>
+                        <span class="metric-value">€1,510.84 | +20.23%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Total Uplift:</span>
+                        <span class="metric-value">€2,687.95 | +12.70%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="recommendation">
+                <h4>💡 Recommendation</h4>
+                <p>Directional win. End test, roll out "Beginne Deine Reise z...", queue follow-up tests.</p>
+            </div>
+            
+            <div class="screenshot-section">
+                <h4>📊 Test Results & Analytics</h4>
+                <div class="image-grid">
+                    <img src="images/image10.png" alt="TEET-73 Test Results" title="TEET-73 Test Results">
+                    <img src="images/image1.png" alt="TEET-73 Analytics Dashboard" title="TEET-73 Analytics Dashboard">
+                </div>
+            </div>
+        </div>
+
+        <!-- TEET-109 -->
+        <div id="teet-109" class="test-section">
+            <div class="test-header">
+                <h2>TEET-109 | [JS] Explainer Video Integration on Jetzt Starten Page</h2>
+                <div class="ice-score">ICE: 22/30</div>
+                <a href="https://app.hypertask.ai/share?id=76d5336a-97cb-4ee0-a20a-26386a164cb0" target="_blank" class="test-link">🔗 View in Hypertask</a>
+                <a href="https://app.vwo.com/#/test/ab/52/summary/?accountId=1091932" target="_blank" class="test-link">📊 View in VWO</a>
+            </div>
+            
+            <div class="results-grid">
+                <div class="result-box winner">
+                    <h3>🏆 Winner: Variation 1</h3>
+                    <div class="metric">
+                        <span class="metric-label">Revenue Uplift:</span>
+                        <span class="metric-value">€1,279.56</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">CR Uplift:</span>
+                        <span class="metric-value">+2.99%</span>
+                    </div>
+                </div>
+                <div class="result-box">
+                    <h3>📈 All Variations Performance</h3>
+                    <div class="metric">
+                        <span class="metric-label">Variation 1:</span>
+                        <span class="metric-value">€1,279.56 | +2.99%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Total Uplift:</span>
+                        <span class="metric-value">€1,279.56 | +2.99%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="screenshot-section">
+                <h4>📊 Test Results & Analytics</h4>
+                <div class="image-grid">
+                    <img src="images/image8.png" alt="TEET-109 Test Results" title="TEET-109 Test Results">
+                    <img src="images/image3.png" alt="TEET-109 Analytics Dashboard" title="TEET-109 Analytics Dashboard">
+                </div>
+            </div>
+        </div>
+
+        <!-- TEET-82 -->
+        <div id="teet-82" class="test-section">
+            <div class="test-header">
+                <h2>TEET-82 | [HOME]: Glowcast Module Positioning for Improved Visibility and Trust</h2>
+                <div class="ice-score">ICE: 24/30</div>
+                <a href="https://app.hypertask.ai/share?id=220fbf5e-2054-42b7-a48d-4e1228247689" target="_blank" class="test-link">🔗 View in Hypertask</a>
+                <a href="https://app.vwo.com/#/test/ab/71/summary/?accountId=1091932" target="_blank" class="test-link">📊 View in VWO</a>
+            </div>
+            
+            <div class="results-grid">
+                <div class="result-box winner">
+                    <h3>🏆 Winner: V2 Place above About ...</h3>
+                    <div class="metric">
+                        <span class="metric-label">Revenue Uplift:</span>
+                        <span class="metric-value">€1,732.22</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">CR Uplift:</span>
+                        <span class="metric-value">+14.28%</span>
+                    </div>
+                </div>
+                <div class="result-box">
+                    <h3>📈 All Variations Performance</h3>
+                    <div class="metric">
+                        <span class="metric-label">V2 Place above About ...:</span>
+                        <span class="metric-value">€1,732.22 | +14.28%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Total Uplift:</span>
+                        <span class="metric-value">€1,732.22 | +14.28%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="screenshot-section">
+                <h4>📊 Test Results & Analytics</h4>
+                <div class="image-grid">
+                    <img src="images/image4.png" alt="TEET-82 Test Results" title="TEET-82 Test Results">
+                    <img src="images/image25.png" alt="TEET-82 Analytics Dashboard" title="TEET-82 Analytics Dashboard">
+                </div>
+            </div>
+        </div>
+
+        <!-- TEET-72 -->
+        <div id="teet-72" class="test-section">
+            <div class="test-header">
+                <h2>TEET-72 | [HOME]: Optimize Sub-Text Below "Starter Sets" Heading to Emphasize Benefits</h2>
+                <div class="ice-score">ICE: 22/30</div>
+                <a href="https://app.hypertask.ai/share?id=2e09e3ac-f7c2-4c30-9978-35fc25015af0" target="_blank" class="test-link">🔗 View in Hypertask</a>
+                <a href="https://app.vwo.com/#/test/ab/63/summary/?accountId=1091932" target="_blank" class="test-link">📊 View in VWO</a>
+            </div>
+            
+            <div class="results-grid">
+                <div class="result-box winner">
+                    <h3>🏆 Winner: V4 Alles was Du brauchst ...</h3>
+                    <div class="metric">
+                        <span class="metric-label">Revenue Uplift:</span>
+                        <span class="metric-value">€1,467.42</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">CR Uplift:</span>
+                        <span class="metric-value">+28.62%</span>
+                    </div>
+                </div>
+                <div class="result-box">
+                    <h3>📈 All Variations Performance</h3>
+                    <div class="metric">
+                        <span class="metric-label">V3 Natürlich, wirksam und...:</span>
+                        <span class="metric-value">€210.09 | +6.87%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">V4 Alles was Du brauchst ...:</span>
+                        <span class="metric-value">€1,467.42 | +28.62%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">V5 Dein komplettes, umwe...:</span>
+                        <span class="metric-value">€416.08 | +10.05%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Total Uplift:</span>
+                        <span class="metric-value">€2,093.59 | +15.37%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="screenshot-section">
+                <h4>📊 Test Results & Analytics</h4>
+                <div class="image-grid">
+                    <img src="images/image16.png" alt="TEET-72 Test Results" title="TEET-72 Test Results">
+                    <img src="images/image7.png" alt="TEET-72 Analytics Dashboard" title="TEET-72 Analytics Dashboard">
+                </div>
+            </div>
+        </div>
+
+        <!-- TEET-77 -->
+        <div id="teet-77" class="test-section">
+            <div class="test-header">
+                <h2>TEET-77 | [Home]: Vorrat Sub-Text – Motivation Framing Test</h2>
+                <div class="ice-score">ICE: 24/30</div>
+                <a href="https://app.hypertask.ai/share?id=dc7a4a2a-820f-42b7-bdad-1831b1d50acb" target="_blank" class="test-link">🔗 View in Hypertask</a>
+                <a href="https://app.vwo.com/#/test/ab/66/summary/?accountId=1091932" target="_blank" class="test-link">📊 View in VWO</a>
+            </div>
+            
+            <div class="results-grid">
+                <div class="result-box winner">
+                    <h3>🏆 Winner: V3 Jetzt auffüllen und Dei...</h3>
+                    <div class="metric">
+                        <span class="metric-label">Revenue Uplift:</span>
+                        <span class="metric-value">€1,187.73</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">CR Uplift:</span>
+                        <span class="metric-value">+22.96%</span>
+                    </div>
+                </div>
+                <div class="result-box">
+                    <h3>📈 All Variations Performance</h3>
+                    <div class="metric">
+                        <span class="metric-label">V2 Lagere nach, damit Dei...:</span>
+                        <span class="metric-value">€535.06 | +13.28%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">V3 Jetzt auffüllen und Dei...:</span>
+                        <span class="metric-value">€1,187.73 | +22.96%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">V4 Damit Du nie auf Dein ...:</span>
+                        <span class="metric-value">€931.92 | +17.59%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Total Uplift:</span>
+                        <span class="metric-value">€2,654.71 | +18.03%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="screenshot-section">
+                <h4>📊 Test Results & Analytics</h4>
+                <div class="image-grid">
+                    <img src="images/image16.png" alt="TEET-77 Test Results" title="TEET-77 Test Results">
+                    <img src="images/image7.png" alt="TEET-77 Analytics Dashboard" title="TEET-77 Analytics Dashboard">
+                </div>
+            </div>
+        </div>
+
+        <!-- TEET-54 -->
+        <div id="teet-54" class="test-section">
+            <div class="test-header">
+                <h2>TEET-54 | [HOME]: Home Hero Claim Test for Carousel Image #1 (Woman in White T-Shirt)</h2>
+                <div class="ice-score">ICE: 24/30</div>
+                <a href="https://app.hypertask.ai/share?id=cdd0f8e3-99ba-4619-860e-9589d73a9142" target="_blank" class="test-link">🔗 View in Hypertask</a>
+                <a href="https://app.vwo.com/#/test/ab/42/report?accountId=1091932" target="_blank" class="test-link">📊 View in VWO</a>
+            </div>
+            
+            <div class="results-grid">
+                <div class="result-box winner">
+                    <h3>🏆 Winner: Strahlendes Lächeln & strahlend weiße Zähne – Mit teethlovers Bio-Zahnpulver</h3>
+                    <div class="metric">
+                        <span class="metric-label">Revenue Uplift:</span>
+                        <span class="metric-value">€1,191.74</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">CR Uplift:</span>
+                        <span class="metric-value">+90.40%</span>
+                    </div>
+                </div>
+                <div class="result-box">
+                    <h3>📈 All Variations Performance</h3>
+                    <div class="metric">
+                        <span class="metric-label">Strahlendes Lächeln, weiße Zähne:</span>
+                        <span class="metric-value">€785.13 | +78.67%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Weiße Zähne, strahlendes Lächeln:</span>
+                        <span class="metric-value">€783.99 | +84.96%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Gesund, weiße Zähne:</span>
+                        <span class="metric-value">€239.35 | +81.32%</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">Total Uplift:</span>
+                        <span class="metric-value">€4,955.67 | +86.57%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="screenshot-section">
+                <h4>📊 Test Results & Analytics</h4>
+                <div class="image-grid">
+                    <img src="images/image22.png" alt="TEET-54 Test Results" title="TEET-54 Test Results">
+                    <img src="images/image17.png" alt="TEET-54 Analytics Dashboard" title="TEET-54 Analytics Dashboard">
+                </div>
+            </div>
+        </div>
+
+        <!-- TEET-69 -->
+        <div id="teet-69" class="test-section">
+            <div class="test-header">
+                <h2>TEET-69 | [HOME]: Test Refill Concept Section Heading for Clarity and Value Communication</h2>
+                <div class="ice-score">ICE: 24/30</div>
+                <a href="https://app.hypertask.ai/share?id=59649c90-8391-4a03-bb98-7be3bb506995" target="_blank" class="test-link">🔗 View in Hypertask</a>
+                <a href="https://app.vwo.com/#/test/ab/57/summary/?accountId=1091932" target="_blank" class="test-link">📊 View in VWO</a>
+            </div>
+            
+            <div class="results-grid">
+                <div class="result-box winner">
+                    <h3>🏆 Winner: V1</h3>
+                    <div class="metric">
+                        <span class="metric-label">Revenue Uplift:</span>
+                        <span class="metric-value">€1,279.56</span>
+                    </div>
+                    <div class="metric">
+                        <span class="metric-label">CR Uplift:</span>
+                        <span class="metric-value">+2.99%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="screenshot-section">
+                <h4>📊 Test Results & Analytics</h4>
+                <div class="image-grid">
+                    <img src="images/image14.png" alt="TEET-69 Test Results" title="TEET-69 Test Results">
+                    <img src="images/image12.png" alt="TEET-69 Analytics Dashboard" title="TEET-69 Analytics Dashboard">
+                </div>
+            </div>
+        </div>
+
+        <!-- TEET-59 -->
+        <div id="teet-59" class="test-section">
+            <div class="test-header">
+                <h2>TEET-59 | [HOME] Test "Darum Zahnpulver" Heading Variations for FAQ Section</h2>
+                <div class="ice-score">ICE: 22/30</div>
+                <a href="https://app.hypertask.ai/share?id=41bd5a4f-5163-46d5-975b-46d146688c36" target="_blank" class="test-link">🔗 View in Hypertask</a>
+                <a href="https://app.vwo.com/#/test/ab/44/summary/?accountId=1091932" target="_blank" class="test-link">📊 View in VWO</a>
+            </div>
+            
+            <div class="results-grid">
+                <div class="result-box winner">
+                    <h3>🏆 Winner: V2</h3>
+                    <div class="metric">
+                        <span class="metric-label">Heading:</span>
+                        <span class="metric-value">Warum unser Zahnpulver besser wirkt als Zahnpasta</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="screenshot-section">
+                <h4>📊 Test Results & Analytics</h4>
+                <div class="image-grid">
+                    <img src="images/image9.png" alt="TEET-59 Test Results" title="TEET-59 Test Results">
+                    <img src="images/image2.png" alt="TEET-59 Analytics Dashboard" title="TEET-59 Analytics Dashboard">
+                </div>
+            </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="test-section">
+            <div class="test-header">
+                <h3>📋 Implementation Notes</h3>
+            </div>
+            <div class="result-box">
+                <p><strong>✅ Accepted & Ready for Implementation:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>TEET-82: Glowcast module positioning above About section (V2)</li>
+                    <li>TEET-72: V3 variation for starter sets sub-text</li>
+                </ul>
+                
+                <p style="margin-top: 20px;"><strong>🔄 Still Running:</strong></p>
+                <ul style="margin-left: 20px; margin-top: 10px;">
+                    <li>TEET-101: Deadline test - performing well but continuing</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- AB Tests Launched in August -->
+        <div class="test-section">
+            <div class="test-header">
+                <h3>🚀 AB Tests Launched in August</h3>
+            </div>
+            <div class="result-box">
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 20px;">
+                    <div>
+                        <h4 style="color: #155724; margin-bottom: 15px;">📊 Homepage Tests</h4>
+                        <ul style="margin-left: 20px; line-height: 1.6;">
+                            <li><a href="https://app.hypertask.ai/share?id=66063e55-db96-4e6c-9c81-54026c0757ac" target="_blank" style="color: #007bff; text-decoration: none;">TEET-88: Refine 'About Us' CTA to Match Emotional Storytelling (ICE: 25/30)</a></li>
+                            <li><a href="https://app.hypertask.ai/share?id=b9e5acfe-72d9-4620-80e5-a145804640d2" target="_blank" style="color: #007bff; text-decoration: none;">TEET-79: Test Refill Section Description for Clarity, Value Perception, and Motivation (ICE: 24/30)</a></li>
+                            <li><a href="https://app.hypertask.ai/share?id=6aa4eaa7-cadd-40a9-9705-8162d19b6637" target="_blank" style="color: #007bff; text-decoration: none;">TEET-90: Make Promo Bar Static for Higher Code Usage (ICE: 24/30)</a></li>
+                            <li><a href="https://app.hypertask.ai/share?id=57f85376-0f91-4542-90d1-00d92aaf345a" target="_blank" style="color: #007bff; text-decoration: none;">TEET-92: Glowcast Module Headline – Localization & Clarity Test (ICE: 24/30)</a></li>
+                            <li><a href="https://app.hypertask.ai/share?id=691d42b5-e45a-40c8-b90e-77a72c293569" target="_blank" style="color: #007bff; text-decoration: none;">TEET-94: Glowcast Description Copy Clarity and Engagement Enhancement (ICE: 24/30)</a></li>
+                            <li><a href="https://app.hypertask.ai/share?id=2ef60c49-2227-4a78-a2e2-362e524fc7dc" target="_blank" style="color: #007bff; text-decoration: none;">TEET-78: Vorrat Section CTA Text Optimization (ICE: 25/30)</a></li>
+                            <li><a href="https://app.hypertask.ai/share?id=fe6b3c85-e82b-41d8-851f-738915108b68" target="_blank" style="color: #007bff; text-decoration: none;">TEET-97: Accordion Label Clarity and Conversion Impact (ICE: 23/30)</a></li>
+                            <li><a href="https://app.hypertask.ai/share?id=4b7eca44-e775-4194-9033-3f2b7e7ee8b4" target="_blank" style="color: #007bff; text-decoration: none;">TEET-99: Add credibility line Under Hero CTA (ICE: 24/30)</a></li>
+                            <li><a href="https://app.hypertask.ai/share?id=5205a3cb-2d0a-4329-84eb-540f6c72dd8a" target="_blank" style="color: #007bff; text-decoration: none;">TEET-98: Accordion Label – "100% Active Ingredients" (ICE: 23/30)</a></li>
+                            <li><a href="https://app.hypertask.ai/share?id=7add270f-ec13-4ea3-84f0-24b552e00120" target="_blank" style="color: #007bff; text-decoration: none;">TEET-101: Hero Headline Clarity & Benefit Emphasis Test (ICE: 25/30)</a></li>
+                            <li><a href="https://app.hypertask.ai/share?id=e18d7ed9-c510-477c-89a2-39d18b5ee018" target="_blank" style="color: #007bff; text-decoration: none;">TEET-66: Test Homepage Section Heading Above Product Sets for Clarity and Engagement (ICE: 23/30)</a></li>
+                            <li><a href="https://app.hypertask.ai/share?id=57405a20-4a71-4d86-a055-7d30d6be8a6d" target="_blank" style="color: #007bff; text-decoration: none;">TEET-106: Accordion Label Clarity – "NATÜRLICH / NATURALLY" (ICE: 25/30)</a></li>
+                            <li><a href="https://app.hypertask.ai/share?id=ca7bab09-81dd-4f8c-9825-118a769bcd66" target="_blank" style="color: #007bff; text-decoration: none;">TEET-107: Accordion Label (Highlighted: "ZERO WASTE") (ICE: 25/30)</a></li>
+                            <li><a href="https://app.hypertask.ai/share?id=7632c398-7e11-4374-8fec-563aaa3bd8ed" target="_blank" style="color: #007bff; text-decoration: none;">TEET-108: Vorrat Sub-Text – Motivation Framing Test (NEW) (ICE: 24/30)</a></li>
+                            <li><a href="https://app.hypertask.ai/share?id=b770ae0e-4356-46b4-b62e-4416f9686f16" target="_blank" style="color: #007bff; text-decoration: none;">TEET-111: Move Intro & Refill Section Below Product Recommendation (ICE: 21/30)</a></li>
+                            <li><a href="https://app.hypertask.ai/share?id=3c5e306a-9497-4f08-b945-9688d08b57b1" target="_blank" style="color: #007bff; text-decoration: none;">TEET-113: Move "Alex & Marie – Unser Versprechen" Section Directly Under "Passend zu Deinem Produkt" (ICE: 21/30)</a></li>
+                            <li><a href="https://app.hypertask.ai/share?id=d0497e0b-4e23-4cd1-9284-71a606ea44ec" target="_blank" style="color: #007bff; text-decoration: none;">TEET-115: Add Scroll Indicators for Horizontal Product Section (ICE: 25/30)</a></li>
+                            <li><a href="https://app.hypertask.ai/share?id=4a8d050c-a1ed-426f-99e8-06344080093f" target="_blank" style="color: #007bff; text-decoration: none;">TEET-117: ZeroWaste Section Positioning – Conversion Optimization (ICE: 24/30)</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: #155724; margin-bottom: 15px;">🎯 Jetzt Starten Page Tests</h4>
+                        <ul style="margin-left: 20px; line-height: 1.6;">
+                            <li><a href="https://app.hypertask.ai/share?id=c9dc196e-cf33-4ff9-bf81-80915108e0d0" target="_blank" style="color: #007bff; text-decoration: none;">TEET-100: Move Comparison Section Above 6 Gründe for Earlier Product Differentiation (ICE: 25/30)</a></li>
+                        </ul>
+                    </div>
+                    <div>
+                        <h4 style="color: #155724; margin-bottom: 15px;">🛍️ Product Sets Page Tests</h4>
+                        <ul style="margin-left: 20px; line-height: 1.6;">
+                            <li><a href="https://app.hypertask.ai/share?id=27ab7b68-d07e-46dc-a157-38f62dc3b218" target="_blank" style="color: #007bff; text-decoration: none;">TEET-116: Hero Section Label & Heading Optimization Test – Product Sets (ICE: 26/30)</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div style="margin-top: 20px; padding: 15px; background: #f8f9fa; border-radius: 8px; text-align: left;">
+                    <p style="margin: 0; color: #495057; font-weight: 500;">
+                        <strong>📊 Total Tests Launched: 25</strong> | 
+                        <strong>🏠 Homepage: 18</strong> | 
+                        <strong>🎯 Jetzt Starten: 1</strong> | 
+                        <strong>🛍️ Product Sets: 1</strong>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    </div> <!-- Close mainContent div -->
+    
+    <!-- Fullscreen Modal -->
+    <div id="fullscreenModal" class="fullscreen-modal">
+        <span class="close-modal">&times;</span>
+        <img id="fullscreenImage" src="" alt="Fullscreen Image">
+    </div>
+</body>
+</html>
